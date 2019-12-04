@@ -28,11 +28,12 @@ from lexer import Lexer
 
 # ----------------------------------------------------------------------
 # Obtener los nodos AST.
-# Lea las instrucciones en ast.py 
-from ast import *
+# Lea las instrucciones en ast.py
+from syntax_tree import *
 
 
 class Parser(sly.Parser):
+
     debugfile = 'parser.txt'
 
     tokens = Lexer.tokens
@@ -40,8 +41,61 @@ class Parser(sly.Parser):
     precedence = (
     )
 
-    @_("decl_list")
-    def program(self, p):
+    @_("titulo dias horas actividades")
+    def horario(self, p):
+        return (p.titulo, p.dias, p.horas, p.actividades)
+
+    @_("titulo dias actividades")
+    def horario(self, p):
+        return (p.titulo, p.dias, p.actividades)
+
+    @_("titulo horas actividades")
+    def horario(self, p):
+        return (p.titulo, p.horas, p.actividades)
+
+    @_("titulo actividades")
+    def horario(self, p):
+        return (p.titulo, p.actividades)
+
+    @_("TITULO DP CADENA")
+    def titulo(self, p):
+        return (p.TITULO, p.DP, p.CADENA)
+
+    @_("DIAS DP DIA GUION DIA")
+    def dias(self, p):
+        return (p.DIAS, p.DP, p.DIA0, p.GUION, p.DIA1)
+
+    @_("HORAS DP HORA GUION HORA")
+    def horas(self, p):
+        return (p.HORAS, p.DP, p.HORA0, p.GUION, p.HORA1)
+
+    @_("ACTIVIDADES DP lista_actividades")
+    def actividades(self, p):
+        return (p.ACTIVIDADES, p.DP, p.lista_actividades)
+
+    @_("clase PYC lista_actividades")
+    def lista_actividades(self, p):
+        p.lista_actividades.append(p.clase)
+        return p.lista_actividades
+
+    @_("clase")
+    def lista_actividades(self, p):
+        return [p.clase]
+
+    @_("empty")
+    def lista_actividades(self, p):
+        return []
+
+    @_("CADENA franja_horaria")
+    def clase(self, p):
+        return (p.CADENA, p.franja_horaria)
+
+    @_("empty")
+    def franja_horaria(self, p):
+        return ()
+
+    @_("")
+    def empty(self, p):
         pass
 
     # ----------------------------------------------------------------------
@@ -82,7 +136,7 @@ def main():
         raise SystemExit(1)
 
     # Parse y crea el AST
-    ast = parse(open(sys.argv[1]).read())
+    ast = parse(open(sys.argv[1], encoding="utf8").read())
 
     # Genera el árbol de análisis sintáctico resultante
     for depth, node in flatten(ast):
