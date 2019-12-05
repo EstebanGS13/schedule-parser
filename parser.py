@@ -22,7 +22,7 @@ import sly
 from errors import error
 
 # ------------------------------------------------- ---------------------
-# Importar la clase lexer. Su lista de tokens es necesaria para validar y 
+# Importar la clase lexer. Su lista de tokens es necesaria para validar y
 # construir el objeto analizador.
 from lexer import Lexer
 
@@ -61,38 +61,72 @@ class Parser(sly.Parser):
     def titulo(self, p):
         return (p.TITULO, p.DP, p.CADENA)
 
-    @_("DIAS DP DIA GUION DIA")
+    @_("DIAS DP conjunto_dias")
     def dias(self, p):
-        return (p.DIAS, p.DP, p.DIA0, p.GUION, p.DIA1)
+        return (p.DIAS, p.DP, p.conjunto_dias)
 
-    @_("HORAS DP HORA GUION HORA")
+    @_("HORAS DP rango_horas")
     def horas(self, p):
-        return (p.HORAS, p.DP, p.HORA0, p.GUION, p.HORA1)
+        return (p.HORAS, p.DP, p.rango_horas)
 
-    @_("ACTIVIDADES DP lista_actividades")
+    @_("ACTIVIDADES DP lista_clases")
     def actividades(self, p):
-        return (p.ACTIVIDADES, p.DP, p.lista_actividades)
+        return (p.ACTIVIDADES, p.DP, p.lista_clases)
 
-    @_("clase PYC lista_actividades")
-    def lista_actividades(self, p):
-        p.lista_actividades.append(p.clase)
-        return p.lista_actividades
-
-    @_("clase")
-    def lista_actividades(self, p):
-        return [p.clase]
+    @_("clase PYC lista_clases")
+    def lista_clases(self, p):
+        p.lista_clases.append(p.clase)
+        return p.lista_clases
 
     @_("empty")
-    def lista_actividades(self, p):
+    def lista_clases(self, p):
         return []
 
-    @_("CADENA franja_horaria")
+    @_("CADENA lista_franjas")
     def clase(self, p):
-        return (p.CADENA, p.franja_horaria)
+        return (p.CADENA, p.lista_franjas)
+
+    @_("lista_franjas COMA franja")
+    def lista_franjas(self, p):
+        p.lista_franjas.append(p.franja)
+        return p.lista_franjas
+
+    @_("franja")
+    def lista_franjas(self, p):
+        return [p.franja]
+
+    @_("lista_dias POR rango_horas")
+    def franja(self, p):
+        return (p.lista_dias, p.POR, p.rango_horas)
+
+    @_("lista_dias MAS conjunto_dias")
+    def lista_dias(self, p):
+        p.lista_dias.append(p.conjunto_dias)
+        return p.lista_dias
+
+    @_("conjunto_dias")
+    def lista_dias(self, p):
+        return [p.conjunto_dias]
 
     @_("empty")
-    def franja_horaria(self, p):
-        return ()
+    def lista_dias(self, p):
+        return []
+
+    @_("rango_dias")
+    def conjunto_dias(self, p):
+        return (p.rango_dias)
+
+    @_("DIA")
+    def conjunto_dias(self, p):
+        return (p.DIA)
+
+    @_("DIA GUION DIA")
+    def rango_dias(self, p):
+        return (p.DIA0, p.GUION, p.DIA1)
+
+    @_("HORA GUION HORA")
+    def rango_horas(self, p):
+        return (p.HORA0, p.GUION, p.HORA1)
 
     @_("")
     def empty(self, p):
