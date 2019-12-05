@@ -28,8 +28,7 @@ class Lexer(sly.Lexer):
     tokens = {
         # keywords
         *{unidecode.unidecode(kw.upper()) for kw in keywords},
-
-        DP, DIA, GUION, HORA, PYC, COMA, POR, MAS, CADENA, PALABRA
+        DP, DIA, GUION, HORA, PYC, COMA, POR, MAS, CADENA
     }
 
     # ----------------------------------------------------------------------
@@ -69,15 +68,15 @@ class Lexer(sly.Lexer):
     # Las palabras reservadas del lenguaje. Debe capturar estas y cambiar su tipo
     # de token para que coincida con la palabra clave adecuada.'
 
-    # TITULO = r'Título'
-    # DIAS = r'Días'
-    # HORAS = r'Horas'
-    # ACTIVIDADES = r'Actividades'
-    PALABRA = r'[A-zÀ-ú]+'
-    PALABRA['Título'] = TITULO
-    PALABRA['Días'] = DIAS
-    PALABRA['Horas'] = HORAS
-    PALABRA['Actividades'] = ACTIVIDADES
+    TITULO = r'Título'
+    DIAS = r'Días'
+    HORAS = r'Horas'
+    ACTIVIDADES = r'Actividades'
+    # PALABRA = r'[A-zÀ-ú]+'
+    # PALABRA['Título'] = TITULO
+    # PALABRA['Días'] = DIAS
+    # PALABRA['Horas'] = HORAS
+    # PALABRA['Actividades'] = ACTIVIDADES
 
     @_(r'\n')
     def newline(self, t):
