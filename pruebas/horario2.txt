@@ -1,0 +1,11 @@
+Título: "Segundo Semestre 2019"
+Días: L-V
+Horas: 9-18
+Actividades:
+    "Ingeniería de Software I" L + X + V * 9-11;
+    "Constitución Política" L * 11-13;
+    "Inteligencia Artificial" M + J * 11-13;
+    "Compiladores" M + J * 14-16;
+    "Arquitectura de Computadores" M + J * 16-18;
+    "Administración de Empresas" X + V * 11-13;
+    "Comunicaciones I" X + V * 16-18;
