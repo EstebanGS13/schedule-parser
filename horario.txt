@@ -1,0 +1,7 @@
+Título: "Segundo Semestre 2007"
+Días: L-V
+Horas: 10-20
+Actividades:
+    "Procesadores" M * 15-17, J * 10-12;
+    "Proyecto" L-X + V * 10-13, J * 12-14;
+    "Estudio" * 17-20;
