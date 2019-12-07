@@ -1,0 +1,416 @@
+Grammar:
+
+Rule 0     S' -> horario
+Rule 1     horario -> titulo actividades
+Rule 2     horario -> titulo horas actividades
+Rule 3     horario -> titulo dias actividades
+Rule 4     horario -> titulo dias horas actividades
+Rule 5     titulo -> TITULO DP CADENA
+Rule 6     dias -> DIAS DP rango_dias
+Rule 7     horas -> HORAS DP rango_horas
+Rule 8     actividades -> ACTIVIDADES DP lista_clases
+Rule 9     lista_clases -> empty
+Rule 10    lista_clases -> lista_clases clase PYC
+Rule 11    clase -> CADENA lista_franjas
+Rule 12    lista_franjas -> franja
+Rule 13    lista_franjas -> lista_franjas COMA franja
+Rule 14    franja -> lista_dias POR rango_horas
+Rule 15    lista_dias -> empty
+Rule 16    lista_dias -> rango_dias
+Rule 17    lista_dias -> lista_dias MAS rango_dias
+Rule 18    rango_dias -> DIA GUION DIA
+Rule 19    rango_dias -> DIA
+Rule 20    rango_horas -> HORA GUION HORA
+Rule 21    empty -> <empty>
+
+Terminals, with rules where they appear:
+
+ACTIVIDADES          : 8
+CADENA               : 5 11
+COMA                 : 13
+DIA                  : 18 18 19
+DIAS                 : 6
+DP                   : 5 6 7 8
+GUION                : 18 20
+HORA                 : 20 20
+HORAS                : 7
+MAS                  : 17
+POR                  : 14
+PYC                  : 10
+TITULO               : 5
+error                : 
+
+Nonterminals, with rules where they appear:
+
+actividades          : 1 2 3 4
+clase                : 10
+dias                 : 3 4
+empty                : 9 15
+franja               : 12 13
+horario              : 0
+horas                : 2 4
+lista_clases         : 8 10
+lista_dias           : 14 17
+lista_franjas        : 11 13
+rango_dias           : 6 16 17
+rango_horas          : 7 14
+titulo               : 1 2 3 4
+
+
+state 0
+
+    (0) S' -> . horario
+    (1) horario -> . titulo actividades
+    (2) horario -> . titulo horas actividades
+    (3) horario -> . titulo dias actividades
+    (4) horario -> . titulo dias horas actividades
+    (5) titulo -> . TITULO DP CADENA
+    TITULO          shift and go to state 3
+
+    horario                        shift and go to state 1
+    titulo                         shift and go to state 2
+
+state 1
+
+    (0) S' -> horario .
+
+
+state 2
+
+    (1) horario -> titulo . actividades
+    (2) horario -> titulo . horas actividades
+    (3) horario -> titulo . dias actividades
+    (4) horario -> titulo . dias horas actividades
+    (8) actividades -> . ACTIVIDADES DP lista_clases
+    (7) horas -> . HORAS DP rango_horas
+    (6) dias -> . DIAS DP rango_dias
+    ACTIVIDADES     shift and go to state 7
+    HORAS           shift and go to state 8
+    DIAS            shift and go to state 9
+
+    actividades                    shift and go to state 4
+    horas                          shift and go to state 5
+    dias                           shift and go to state 6
+
+state 3
+
+    (5) titulo -> TITULO . DP CADENA
+    DP              shift and go to state 10
+
+
+state 4
+
+    (1) horario -> titulo actividades .
+    $end            reduce using rule 1 (horario -> titulo actividades .)
+
+
+state 5
+
+    (2) horario -> titulo horas . actividades
+    (8) actividades -> . ACTIVIDADES DP lista_clases
+    ACTIVIDADES     shift and go to state 7
+
+    actividades                    shift and go to state 11
+
+state 6
+
+    (3) horario -> titulo dias . actividades
+    (4) horario -> titulo dias . horas actividades
+    (8) actividades -> . ACTIVIDADES DP lista_clases
+    (7) horas -> . HORAS DP rango_horas
+    ACTIVIDADES     shift and go to state 7
+    HORAS           shift and go to state 8
+
+    actividades                    shift and go to state 12
+    horas                          shift and go to state 13
+
+state 7
+
+    (8) actividades -> ACTIVIDADES . DP lista_clases
+    DP              shift and go to state 14
+
+
+state 8
+
+    (7) horas -> HORAS . DP rango_horas
+    DP              shift and go to state 15
+
+
+state 9
+
+    (6) dias -> DIAS . DP rango_dias
+    DP              shift and go to state 16
+
+
+state 10
+
+    (5) titulo -> TITULO DP . CADENA
+    CADENA          shift and go to state 17
+
+
+state 11
+
+    (2) horario -> titulo horas actividades .
+    $end            reduce using rule 2 (horario -> titulo horas actividades .)
+
+
+state 12
+
+    (3) horario -> titulo dias actividades .
+    $end            reduce using rule 3 (horario -> titulo dias actividades .)
+
+
+state 13
+
+    (4) horario -> titulo dias horas . actividades
+    (8) actividades -> . ACTIVIDADES DP lista_clases
+    ACTIVIDADES     shift and go to state 7
+
+    actividades                    shift and go to state 18
+
+state 14
+
+    (8) actividades -> ACTIVIDADES DP . lista_clases
+    (9) lista_clases -> . empty
+    (10) lista_clases -> . lista_clases clase PYC
+    (21) empty -> .
+    CADENA          reduce using rule 21 (empty -> .)
+    $end            reduce using rule 21 (empty -> .)
+
+    lista_clases                   shift and go to state 19
+    empty                          shift and go to state 20
+
+state 15
+
+    (7) horas -> HORAS DP . rango_horas
+    (20) rango_horas -> . HORA GUION HORA
+    HORA            shift and go to state 22
+
+    rango_horas                    shift and go to state 21
+
+state 16
+
+    (6) dias -> DIAS DP . rango_dias
+    (18) rango_dias -> . DIA GUION DIA
+    (19) rango_dias -> . DIA
+    DIA             shift and go to state 24
+
+    rango_dias                     shift and go to state 23
+
+state 17
+
+    (5) titulo -> TITULO DP CADENA .
+    ACTIVIDADES     reduce using rule 5 (titulo -> TITULO DP CADENA .)
+    HORAS           reduce using rule 5 (titulo -> TITULO DP CADENA .)
+    DIAS            reduce using rule 5 (titulo -> TITULO DP CADENA .)
+
+
+state 18
+
+    (4) horario -> titulo dias horas actividades .
+    $end            reduce using rule 4 (horario -> titulo dias horas actividades .)
+
+
+state 19
+
+    (8) actividades -> ACTIVIDADES DP lista_clases .
+    (10) lista_clases -> lista_clases . clase PYC
+    (11) clase -> . CADENA lista_franjas
+    $end            reduce using rule 8 (actividades -> ACTIVIDADES DP lista_clases .)
+    CADENA          shift and go to state 26
+
+    clase                          shift and go to state 25
+
+state 20
+
+    (9) lista_clases -> empty .
+    CADENA          reduce using rule 9 (lista_clases -> empty .)
+    $end            reduce using rule 9 (lista_clases -> empty .)
+
+
+state 21
+
+    (7) horas -> HORAS DP rango_horas .
+    ACTIVIDADES     reduce using rule 7 (horas -> HORAS DP rango_horas .)
+
+
+state 22
+
+    (20) rango_horas -> HORA . GUION HORA
+    GUION           shift and go to state 27
+
+
+state 23
+
+    (6) dias -> DIAS DP rango_dias .
+    ACTIVIDADES     reduce using rule 6 (dias -> DIAS DP rango_dias .)
+    HORAS           reduce using rule 6 (dias -> DIAS DP rango_dias .)
+
+
+state 24
+
+    (18) rango_dias -> DIA . GUION DIA
+    (19) rango_dias -> DIA .
+    GUION           shift and go to state 28
+    ACTIVIDADES     reduce using rule 19 (rango_dias -> DIA .)
+    HORAS           reduce using rule 19 (rango_dias -> DIA .)
+    POR             reduce using rule 19 (rango_dias -> DIA .)
+    MAS             reduce using rule 19 (rango_dias -> DIA .)
+
+
+state 25
+
+    (10) lista_clases -> lista_clases clase . PYC
+    PYC             shift and go to state 29
+
+
+state 26
+
+    (11) clase -> CADENA . lista_franjas
+    (12) lista_franjas -> . franja
+    (13) lista_franjas -> . lista_franjas COMA franja
+    (14) franja -> . lista_dias POR rango_horas
+    (15) lista_dias -> . empty
+    (16) lista_dias -> . rango_dias
+    (17) lista_dias -> . lista_dias MAS rango_dias
+    (21) empty -> .
+    (18) rango_dias -> . DIA GUION DIA
+    (19) rango_dias -> . DIA
+    POR             reduce using rule 21 (empty -> .)
+    MAS             reduce using rule 21 (empty -> .)
+    DIA             shift and go to state 24
+
+    lista_franjas                  shift and go to state 30
+    franja                         shift and go to state 31
+    lista_dias                     shift and go to state 32
+    empty                          shift and go to state 33
+    rango_dias                     shift and go to state 34
+
+state 27
+
+    (20) rango_horas -> HORA GUION . HORA
+    HORA            shift and go to state 35
+
+
+state 28
+
+    (18) rango_dias -> DIA GUION . DIA
+    DIA             shift and go to state 36
+
+
+state 29
+
+    (10) lista_clases -> lista_clases clase PYC .
+    CADENA          reduce using rule 10 (lista_clases -> lista_clases clase PYC .)
+    $end            reduce using rule 10 (lista_clases -> lista_clases clase PYC .)
+
+
+state 30
+
+    (11) clase -> CADENA lista_franjas .
+    (13) lista_franjas -> lista_franjas . COMA franja
+    PYC             reduce using rule 11 (clase -> CADENA lista_franjas .)
+    COMA            shift and go to state 37
+
+
+state 31
+
+    (12) lista_franjas -> franja .
+    COMA            reduce using rule 12 (lista_franjas -> franja .)
+    PYC             reduce using rule 12 (lista_franjas -> franja .)
+
+
+state 32
+
+    (14) franja -> lista_dias . POR rango_horas
+    (17) lista_dias -> lista_dias . MAS rango_dias
+    POR             shift and go to state 38
+    MAS             shift and go to state 39
+
+
+state 33
+
+    (15) lista_dias -> empty .
+    POR             reduce using rule 15 (lista_dias -> empty .)
+    MAS             reduce using rule 15 (lista_dias -> empty .)
+
+
+state 34
+
+    (16) lista_dias -> rango_dias .
+    POR             reduce using rule 16 (lista_dias -> rango_dias .)
+    MAS             reduce using rule 16 (lista_dias -> rango_dias .)
+
+
+state 35
+
+    (20) rango_horas -> HORA GUION HORA .
+    ACTIVIDADES     reduce using rule 20 (rango_horas -> HORA GUION HORA .)
+    COMA            reduce using rule 20 (rango_horas -> HORA GUION HORA .)
+    PYC             reduce using rule 20 (rango_horas -> HORA GUION HORA .)
+
+
+state 36
+
+    (18) rango_dias -> DIA GUION DIA .
+    ACTIVIDADES     reduce using rule 18 (rango_dias -> DIA GUION DIA .)
+    HORAS           reduce using rule 18 (rango_dias -> DIA GUION DIA .)
+    POR             reduce using rule 18 (rango_dias -> DIA GUION DIA .)
+    MAS             reduce using rule 18 (rango_dias -> DIA GUION DIA .)
+
+
+state 37
+
+    (13) lista_franjas -> lista_franjas COMA . franja
+    (14) franja -> . lista_dias POR rango_horas
+    (15) lista_dias -> . empty
+    (16) lista_dias -> . rango_dias
+    (17) lista_dias -> . lista_dias MAS rango_dias
+    (21) empty -> .
+    (18) rango_dias -> . DIA GUION DIA
+    (19) rango_dias -> . DIA
+    POR             reduce using rule 21 (empty -> .)
+    MAS             reduce using rule 21 (empty -> .)
+    DIA             shift and go to state 24
+
+    franja                         shift and go to state 40
+    lista_dias                     shift and go to state 32
+    empty                          shift and go to state 33
+    rango_dias                     shift and go to state 34
+
+state 38
+
+    (14) franja -> lista_dias POR . rango_horas
+    (20) rango_horas -> . HORA GUION HORA
+    HORA            shift and go to state 22
+
+    rango_horas                    shift and go to state 41
+
+state 39
+
+    (17) lista_dias -> lista_dias MAS . rango_dias
+    (18) rango_dias -> . DIA GUION DIA
+    (19) rango_dias -> . DIA
+    DIA             shift and go to state 24
+
+    rango_dias                     shift and go to state 42
+
+state 40
+
+    (13) lista_franjas -> lista_franjas COMA franja .
+    COMA            reduce using rule 13 (lista_franjas -> lista_franjas COMA franja .)
+    PYC             reduce using rule 13 (lista_franjas -> lista_franjas COMA franja .)
+
+
+state 41
+
+    (14) franja -> lista_dias POR rango_horas .
+    COMA            reduce using rule 14 (franja -> lista_dias POR rango_horas .)
+    PYC             reduce using rule 14 (franja -> lista_dias POR rango_horas .)
+
+
+state 42
+
+    (17) lista_dias -> lista_dias MAS rango_dias .
+    POR             reduce using rule 17 (lista_dias -> lista_dias MAS rango_dias .)
+    MAS             reduce using rule 17 (lista_dias -> lista_dias MAS rango_dias .)

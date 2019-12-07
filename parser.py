@@ -38,42 +38,39 @@ class Parser(sly.Parser):
 
     tokens = Lexer.tokens
 
-    precedence = (
-    )
-
     @_("titulo dias horas actividades")
     def horario(self, p):
-        return (p.titulo, p.dias, p.horas, p.actividades)
+        return Horario(p.titulo, p.dias, p.horas, p.actividades)
 
     @_("titulo dias actividades")
     def horario(self, p):
-        return (p.titulo, p.dias, p.actividades)
+        return Horario(p.titulo, p.dias, None, p.actividades)
 
     @_("titulo horas actividades")
     def horario(self, p):
-        return (p.titulo, p.horas, p.actividades)
+        return Horario(p.titulo, None, p.horas, p.actividades)
 
     @_("titulo actividades")
     def horario(self, p):
-        return (p.titulo, p.actividades)
+        return Horario(p.titulo, None, None, p.actividades)
 
     @_("TITULO DP CADENA")
     def titulo(self, p):
-        return (p.TITULO, p.DP, p.CADENA)
+        return BloqueTitulo(p.CADENA, lineno=p.lineno)
 
-    @_("DIAS DP conjunto_dias")
+    @_("DIAS DP rango_dias")
     def dias(self, p):
-        return (p.DIAS, p.DP, p.conjunto_dias)
+        return BloqueDias(p.rango_dias, lineno=p.lineno)
 
     @_("HORAS DP rango_horas")
     def horas(self, p):
-        return (p.HORAS, p.DP, p.rango_horas)
+        return BloqueHoras(p.rango_horas, lineno=p.lineno)
 
     @_("ACTIVIDADES DP lista_clases")
     def actividades(self, p):
-        return (p.ACTIVIDADES, p.DP, p.lista_clases)
+        return BloqueActividades(p.lista_clases, lineno=p.lineno)
 
-    @_("clase PYC lista_clases")
+    @_("lista_clases clase PYC")
     def lista_clases(self, p):
         p.lista_clases.append(p.clase)
         return p.lista_clases
@@ -84,7 +81,7 @@ class Parser(sly.Parser):
 
     @_("CADENA lista_franjas")
     def clase(self, p):
-        return (p.CADENA, p.lista_franjas)
+        return Clase(p.CADENA, p.lista_franjas, lineno=p.lineno)
 
     @_("lista_franjas COMA franja")
     def lista_franjas(self, p):
@@ -97,36 +94,32 @@ class Parser(sly.Parser):
 
     @_("lista_dias POR rango_horas")
     def franja(self, p):
-        return (p.lista_dias, p.POR, p.rango_horas)
+        return FranjaHoraria(p.lista_dias, p.rango_horas, lineno=p.lineno)
 
-    @_("lista_dias MAS conjunto_dias")
+    @_("lista_dias MAS rango_dias")
     def lista_dias(self, p):
-        p.lista_dias.append(p.conjunto_dias)
+        p.lista_dias.append(p.rango_dias)
         return p.lista_dias
 
-    @_("conjunto_dias")
+    @_("rango_dias")
     def lista_dias(self, p):
-        return [p.conjunto_dias]
+        return [p.rango_dias]
 
     @_("empty")
     def lista_dias(self, p):
         return []
 
-    @_("rango_dias")
-    def conjunto_dias(self, p):
-        return (p.rango_dias)
-
     @_("DIA")
-    def conjunto_dias(self, p):
-        return (p.DIA)
+    def rango_dias(self, p):
+        return Dia(p.DIA, lineno=p.lineno)
 
     @_("DIA GUION DIA")
     def rango_dias(self, p):
-        return (p.DIA0, p.GUION, p.DIA1)
+        return RangoDias(p.DIA0, p.DIA1, lineno=p.lineno)
 
     @_("HORA GUION HORA")
     def rango_horas(self, p):
-        return (p.HORA0, p.GUION, p.HORA1)
+        return RangoHoras(p.HORA0, p.HORA1, lineno=p.lineno)
 
     @_("")
     def empty(self, p):
@@ -175,6 +168,12 @@ def main():
     # Genera el árbol de análisis sintáctico resultante
     for depth, node in flatten(ast):
         print('%s: %s%s' % (getattr(node, 'lineno', None), ' ' * (4 * depth), node))
+
+    dot = DotVisitor()
+    dot.visit(ast)
+    ast_file = open("AST.txt", "w")
+    ast_file.write(str(dot))
+    ast_file.close()
 
 
 if __name__ == '__main__':
