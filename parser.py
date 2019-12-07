@@ -171,7 +171,7 @@ def main():
 
     dot = DotVisitor()
     dot.visit(ast)
-    ast_file = open("AST.txt", "w")
+    ast_file = open("AST.txt", "w", encoding="utf8")
     ast_file.write(str(dot))
     ast_file.close()
 
